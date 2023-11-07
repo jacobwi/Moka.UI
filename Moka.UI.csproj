@@ -1,0 +1,44 @@
+<Project Sdk="Microsoft.NET.Sdk.Razor">
+
+    <PropertyGroup>
+        <TargetFramework>net7.0</TargetFramework>
+        <Nullable>enable</Nullable>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <LangVersion>default</LangVersion>
+        <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+        <Description>Midmoka blazor components</Description>
+        <Copyright>Jacob William</Copyright>
+        <RepositoryType>Git</RepositoryType>
+        <PackageTags>Blazor, C#, Markdown</PackageTags>
+        <AssemblyVersion>0.0.0.1</AssemblyVersion>
+        <FileVersion>0.0.0.1</FileVersion>
+        <NeutralLanguage>en-US</NeutralLanguage>
+        <Version>0.0.0.1</Version>
+    </PropertyGroup>
+
+
+    <ItemGroup>
+        <SupportedPlatform Include="browser"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="7.0.9"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <Content Update="Resources\logo.png">
+            <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+            <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </Content>
+    </ItemGroup>
+
+
+    <Target Name="CopyBulmaCss" BeforeTargets="PrepareForBuild">
+        <Exec Command="yarn install" WorkingDirectory="$(ProjectDir)"/>
+        <Copy SourceFiles="$(ProjectDir)node_modules/bulma/css/bulma.min.css"
+              DestinationFiles="$(ProjectDir)wwwroot/css/midmoka.css"/>
+    </Target>
+
+
+</Project>

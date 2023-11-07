@@ -1,0 +1,126 @@
+@namespace Midmoka.UI
+
+<div class="field">
+    @if (!string.IsNullOrWhiteSpace(Label))
+    {
+        <label for="@ElementId" class="label">@Label</label>
+    }
+
+    <div class="@TextAreaWrapperClass">
+        <textarea id="@ElementId" 
+                  class="@TextAreaClass" 
+                  @bind="Text" 
+                  @oninput="HandleInput" 
+                  rows="@Rows" 
+                  placeholder="@Placeholder" 
+                  @attributes="AdditionalAttributes"></textarea>
+    </div>
+
+    @if (ShowCharLimit && MaxLength.HasValue)
+    {
+        <p class="help">@($"{Text?.Length ?? 0}/{MaxLength.Value}")</p>
+    }
+
+    @if (!string.IsNullOrWhiteSpace(HelpText))
+    {
+        <p class="help @HelpTextColor">@HelpText</p>
+    }
+
+    @if (ValidationMessages?.Any() ?? false)
+    {
+        <div class="help is-danger">
+            @foreach (var message in ValidationMessages)
+            {
+                <p>@message</p>
+            }
+        </div>
+    }
+</div>
+
+@code {
+    // Public parameters for the component
+    [Parameter]
+    public string Text { get; set; }
+
+    [Parameter]
+    public string Label { get; set; }
+
+    [Parameter]
+    public string Placeholder { get; set; }
+
+    [Parameter]
+    public string HelpText { get; set; }
+
+    [Parameter]
+    public string HelpTextColor { get; set; } = "is-primary";
+
+    [Parameter]
+    public int Rows { get; set; } = 4;
+
+    [Parameter]
+    public bool IsResizable { get; set; } = true;
+
+    [Parameter]
+    public int? MaxLength { get; set; }
+
+    [Parameter]
+    public bool ShowCharLimit { get; set; } = false;
+
+    [Parameter]
+    public IEnumerable<string> ValidationMessages { get; set; }
+
+    [Parameter]
+    public EventCallback<string> TextChanged { get; set; }
+
+    [Parameter]
+    public bool IsFullWidth { get; set; } = false;
+
+    [Parameter]
+    public bool IsRounded { get; set; } = false;
+
+    [Parameter]
+    public bool IsStatic { get; set; } = false;
+
+    [Parameter]
+    public bool IsLoading { get; set; } = false;
+
+    [Parameter]
+    public bool IsDisabled { get; set; } = false;
+
+    [Parameter]
+    public string Size { get; set; }
+
+    [Parameter(CaptureUnmatchedValues = true)]
+    public Dictionary<string, object> AdditionalAttributes { get; set; }
+
+    // Private properties and methods
+    private string ElementId { get; set; } = $"textarea-{Guid.NewGuid()}";
+
+    private string TextAreaWrapperClass => "control" +
+                                           (IsFullWidth ? " is-expanded" : "") +
+                                           (IsLoading ? " is-loading" : "");
+
+    private string TextAreaClass =>
+        "textarea" +
+        (IsRounded ? " is-rounded" : "") +
+        (IsStatic ? " is-static" : "") +
+        (!IsResizable ? " is-resizable" : "") +
+        (IsDisabled ? " is-disabled" : "") +
+        (!string.IsNullOrWhiteSpace(Size) ? $" is-{Size}" : "");
+
+    private async Task HandleInput(ChangeEventArgs e)
+    {
+        Text = e.Value?.ToString();
+        if (MaxLength.HasValue && Text.Length > MaxLength.Value)
+        {
+            Text = Text.Substring(0, MaxLength.Value);
+        }
+        await TextChanged.InvokeAsync(Text);
+    }
+
+    protected override void OnInitialized()
+    {
+        AdditionalAttributes ??= new Dictionary<string, object>();
+    }
+
+}

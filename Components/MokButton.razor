@@ -1,0 +1,30 @@
+@namespace Midmoka.UI
+
+<button class="@ButtonClasses" @attributes="AdditionalAttributes" @onclick="OnClick">@Text</button>
+
+@code {
+
+    [Parameter]
+    public string Text { get; set; } = "Button"; // Default button text
+
+    [Parameter]
+    public bool IsPrimary { get; set; } = false; // Determines if the button is styled as primary
+
+    [Parameter]
+    public BackgroundColor BgColor { get; set; } = BackgroundColor.None; // Background color
+
+    [Parameter]
+    public TextColor TextColor { get; set; } = TextColor.None; // Text color
+
+    [Parameter(CaptureUnmatchedValues = true)]
+    public Dictionary<string, object> AdditionalAttributes { get; set; } // Captures additional attributes
+
+    [Parameter]
+    public EventCallback OnClick { get; set; } // Click event callback
+
+    private string ButtonClasses =>
+        $"button {(IsPrimary ? "is-primary" : "")} " +
+        $"{(BgColor != BackgroundColor.None ? $"is-{BgColor.ToString().ToLower()}" : "")} " +
+        $"{(TextColor != TextColor.None ? $"has-text-{TextColor.ToString().ToLower()}" : "")}";
+
+}

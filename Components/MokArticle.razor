@@ -1,0 +1,32 @@
+@namespace Midmoka.UI
+
+<article class="@ArticleClasses" @attributes="AdditionalAttributes">
+    <p class="title">@Title</p>
+    <p class="subtitle">@Subtitle</p>
+    @if (ContentTemplate != null)
+    {
+        @ContentTemplate
+    }
+</article>
+
+@code {
+
+    [Parameter]
+    public string Title { get; set; }
+
+    [Parameter]
+    public string Subtitle { get; set; }
+
+    [Parameter]
+    public ArticleColor Color { get; set; } = ArticleColor.None;
+
+    [Parameter]
+    public RenderFragment? ContentTemplate { get; set; }
+
+    [Parameter(CaptureUnmatchedValues = true)]
+    public Dictionary<string, object> AdditionalAttributes { get; set; }
+
+    private string ArticleClasses =>
+        $"tile is-child notification {(Color != ArticleColor.None ? $"is-{Color.ToString().ToLower()}" : "")} ";
+
+}

@@ -1,0 +1,123 @@
+@using System.Text
+@namespace Midmoka.UI
+
+
+<div class="@ColumnClasses" @attributes="AdditionalAttributes">
+    @ChildContent
+</div>
+
+@code {
+    // Sizes for each breakpoint
+    [Parameter]
+    public string IsSize { get; set; }
+
+    [Parameter]
+    public string IsSizeMobile { get; set; }
+
+    [Parameter]
+    public string IsSizeTablet { get; set; }
+
+    [Parameter]
+    public string IsSizeTouch { get; set; }
+
+    [Parameter]
+    public string IsSizeDesktop { get; set; }
+
+    [Parameter]
+    public string IsSizeWidescreen { get; set; }
+
+    [Parameter]
+    public string IsSizeFullHD { get; set; }
+
+    // Offset for each breakpoint
+    [Parameter]
+    public string IsOffset { get; set; }
+
+    [Parameter]
+    public string IsOffsetMobile { get; set; }
+
+    [Parameter]
+    public string IsOffsetTablet { get; set; }
+
+    [Parameter]
+    public string IsOffsetTouch { get; set; }
+
+    [Parameter]
+    public string IsOffsetDesktop { get; set; }
+
+    [Parameter]
+    public string IsOffsetWidescreen { get; set; }
+
+    [Parameter]
+    public string IsOffsetFullHD { get; set; }
+
+    // Narrow column
+    [Parameter]
+    public bool IsNarrow { get; set; }
+
+    [Parameter]
+    public bool IsNarrowMobile { get; set; }
+
+    [Parameter]
+    public bool IsNarrowTablet { get; set; }
+
+    [Parameter]
+    public bool IsNarrowTouch { get; set; }
+
+    [Parameter]
+    public bool IsNarrowDesktop { get; set; }
+
+    [Parameter]
+    public bool IsNarrowWidescreen { get; set; }
+
+    [Parameter]
+    public bool IsNarrowFullHD { get; set; }
+
+    // Child content to render inside the column
+    [Parameter]
+    public RenderFragment ChildContent { get; set; }
+
+    // Any additional unmatched attributes
+    [Parameter(CaptureUnmatchedValues = true)]
+    public Dictionary<string, object> AdditionalAttributes { get; set; }
+
+    private string ColumnClasses => new StringBuilder("column")
+        .Append($" {IsSize}")
+        .Append($" {GetSizeClass(IsSizeMobile, "mobile")}")
+        .Append($" {GetSizeClass(IsSizeTablet, "tablet")}")
+        .Append($" {GetSizeClass(IsSizeTouch, "touch")}")
+        .Append($" {GetSizeClass(IsSizeDesktop, "desktop")}")
+        .Append($" {GetSizeClass(IsSizeWidescreen, "widescreen")}")
+        .Append($" {GetSizeClass(IsSizeFullHD, "fullhd")}")
+        .Append($" {GetOffsetClass(IsOffset, "")}")
+        .Append($" {GetOffsetClass(IsOffsetMobile, "mobile")}")
+        .Append($" {GetOffsetClass(IsOffsetTablet, "tablet")}")
+        .Append($" {GetOffsetClass(IsOffsetTouch, "touch")}")
+        .Append($" {GetOffsetClass(IsOffsetDesktop, "desktop")}")
+        .Append($" {GetOffsetClass(IsOffsetWidescreen, "widescreen")}")
+        .Append($" {GetOffsetClass(IsOffsetFullHD, "fullhd")}")
+        .Append($" {GetNarrowClass(IsNarrow, "")}")
+        .Append($" {GetNarrowClass(IsNarrowMobile, "mobile")}")
+        .Append($" {GetNarrowClass(IsNarrowTablet, "tablet")}")
+        .Append($" {GetNarrowClass(IsNarrowTouch, "touch")}")
+        .Append($" {GetNarrowClass(IsNarrowDesktop, "desktop")}")
+        .Append($" {GetNarrowClass(IsNarrowWidescreen, "widescreen")}")
+        .Append($" {GetNarrowClass(IsNarrowFullHD, "fullhd")}")
+        .ToString().Trim();
+
+    private static string GetSizeClass(string size, string breakpoint)
+    {
+        return !string.IsNullOrEmpty(size) ? $"is-{size}-{breakpoint}" : "";
+    }
+
+    private static string GetOffsetClass(string offset, string breakpoint)
+    {
+        return !string.IsNullOrEmpty(offset) ? $"is-offset-{offset}-{breakpoint}" : "";
+    }
+
+    private static string GetNarrowClass(bool isNarrow, string breakpoint)
+    {
+        return isNarrow ? $"is-narrow-{breakpoint}".TrimEnd('-') : "";
+    }
+
+}

@@ -1,0 +1,55 @@
+@namespace Midmoka.UI
+
+<div class="@TileClasses" @attributes="AdditionalAttributes">
+    @ChildContent
+</div>
+
+@code {
+
+    [Parameter]
+    public RenderFragment ChildContent { get; set; }
+
+    [Parameter]
+    public bool IsAncestor { get; set; } = false;
+
+    [Parameter]
+    public bool IsParent { get; set; } = false;
+
+    [Parameter]
+    public bool IsChild { get; set; } = false;
+
+    [Parameter]
+    public bool IsVertical { get; set; } = false;
+
+    [Parameter]
+    public string TileType { get; set; } // Can be "notification", "box", etc.
+
+    [Parameter]
+    public TileColor Color { get; set; } = TileColor.None; // Using TileColor enum
+
+    [Parameter]
+    public int Size { get; set; } = 0; // 0 means no specific size
+
+    [Parameter]
+    public string ResponsiveSize { get; set; } // For responsive tile sizes
+
+    [Parameter(CaptureUnmatchedValues = true)]
+    public Dictionary<string, object> AdditionalAttributes { get; set; }
+
+    private string TileClasses =>
+        "tile" +
+        (IsAncestor ? " is-ancestor" : "") +
+        (IsParent ? " is-parent" : "") +
+        (IsChild ? " is-child" : "") +
+        (IsVertical ? " is-vertical" : "") +
+        (!string.IsNullOrWhiteSpace(TileType) ? $" is-{TileType}" : "") +
+        (Color != TileColor.None ? $" is-{Color.ToString().ToLowerInvariant()}" : "") +
+        (Size > 0 ? $" is-{Size}" : "") +
+        (!string.IsNullOrWhiteSpace(ResponsiveSize) ? $" is-{ResponsiveSize}" : "");
+
+    protected override void OnInitialized()
+    {
+        Console.WriteLine(TileClasses); // This will output the class list to the browser's console for debugging.
+    }
+
+}
