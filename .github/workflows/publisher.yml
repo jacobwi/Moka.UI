@@ -37,9 +37,6 @@ jobs:
       - name: Install dependencies
         run: pnpm install
 
-      - name: Build assets
-        run: pnpm build
-
       - name: Get Version
         id: version
         shell: bash
