@@ -1,4 +1,5 @@
 name: Publish Package
+
 on:
   push:
     tags:
@@ -11,6 +12,7 @@ permissions:
 jobs:
   build:
     runs-on: ubuntu-latest
+
     steps:
       - uses: actions/checkout@v4
         with:
@@ -19,18 +21,7 @@ jobs:
       - name: Setup .NET
         uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: 7.0.x  # Changed to .NET 7 as per your requirements
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '18'
-
-      - name: Install Dependencies
-        run: yarn install
-
-      - name: Build Assets
-        run: yarn build
+          dotnet-version: 8.0.x
 
       - name: Get Version
         id: version
@@ -41,7 +32,7 @@ jobs:
           echo "version-without-v=$VERSION" >> $GITHUB_OUTPUT
 
       - name: Pack
-        run: dotnet pack --configuration Release /p:Version=${{ steps.version.outputs.version-without-v }} -p:PackageId=Midmoka.UI --output .
+        run: dotnet pack --configuration Release /p:Version=${{ steps.version.outputs.version-without-v }} -p:PackageId=BCat.Hosting.MinIO --output .
 
       # Add GitHub Packages source
       - name: Add GitHub Source
@@ -65,23 +56,21 @@ jobs:
           name: Release ${{ steps.version.outputs.version }}
           body: |
             Release of version ${{ steps.version.outputs.version }}
-           
+            
             ### What's Changed
-            - Blazor components wrapping Bulma CSS framework
-            - Responsive design support
-            - Customizable theming
-            - Interactive components
-            - Font Awesome integration
-           
+            - Added MinIO integration for .NET Aspire
+            - Support for custom ports (API and Console)
+            - Configurable credentials
+            - Data volume persistence
+            - S3-compatible endpoint configuration
+            - Connection string support
+            
             ### Getting Started
-            ```html
-            <!-- Add to your _Host.cshtml or index.html -->
-            <link href="_content/Midmoka.UI/css/midmoka.css" rel="stylesheet" />
-            ```
-
             ```csharp
-            // Add to your Program.cs
-            builder.Services.AddMidmokaUI();
+            var builder = DistributedApplication.CreateBuilder(args);
+            var minio = builder.AddMinIO("storage", options => options
+                .WithPorts(apiPort: 9000, consolePort: 9001)
+                .WithCredentials("accesskey", "secretkey"));
             ```
           draft: true
           allowUpdates: true
