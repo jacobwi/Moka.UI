@@ -23,6 +23,23 @@ jobs:
         with:
           dotnet-version: 8.0.x
 
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: 8
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'pnpm'
+
+      - name: Install dependencies
+        run: pnpm install
+
+      - name: Build assets
+        run: pnpm build
+
       - name: Get Version
         id: version
         shell: bash
@@ -54,23 +71,5 @@ jobs:
         with:
           artifacts: "*.nupkg"
           name: Release ${{ steps.version.outputs.version }}
-          body: |
-            Release of version ${{ steps.version.outputs.version }}
-            
-            ### What's Changed
-            - Added MinIO integration for .NET Aspire
-            - Support for custom ports (API and Console)
-            - Configurable credentials
-            - Data volume persistence
-            - S3-compatible endpoint configuration
-            - Connection string support
-            
-            ### Getting Started
-            ```csharp
-            var builder = DistributedApplication.CreateBuilder(args);
-            var minio = builder.AddMinIO("storage", options => options
-                .WithPorts(apiPort: 9000, consolePort: 9001)
-                .WithCredentials("accesskey", "secretkey"));
-            ```
           draft: true
           allowUpdates: true

@@ -54,10 +54,6 @@
             <PackagePath></PackagePath>
         </None>
         <!-- Include the README in the package -->
-        <None Include="../README.md">
-            <Pack>True</Pack>
-            <PackagePath></PackagePath>
-        </None>
     </ItemGroup>
 
     <Target Name="CopyBulmaCss" BeforeTargets="PrepareForBuild">
