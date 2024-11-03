@@ -10,8 +10,8 @@
         <Version>0.0.0.1</Version>
         <Authors>BCat</Authors>
         <PackageIcon>favicon.png</PackageIcon>
-        <PackageId>BCat.Aspire.MinIO</PackageId>
-        <Title>BCat.Aspire.MinIO</Title>
+        <PackageId>Moka.UI</PackageId>
+        <Title>Moka.UI</Title>
         <RootNamespace>Aspire.Hosting.MinIO</RootNamespace>
         <Copyright>Copyright 2024 BCat</Copyright>
         <PackageReadmeFile>README.md</PackageReadmeFile>
